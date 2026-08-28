@@ -22,7 +22,7 @@ body,
 
 body {
   margin: 0;
-  font-family: var(--sans);
+  font-family: "Roboto";
   font-size: 16px;
   line-height: 1.5;
   color: var(--text);
@@ -110,16 +110,15 @@ button:focus-visible {
 
 .landing {
   flex: 1;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-content: start;
-  gap: 12px;
-  width: 100%;
-  max-width: 72rem; /* 28rem is too narrow for many cards */
-  margin: 0 auto;
-  padding: 24px;
   align-items: center;
   justify-content: center;
+  padding: 24px;
+  gap: 16px;
 }
 
 .card {
@@ -167,10 +166,11 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   min-height: var(--tap);
-  padding: 0 22px;
+  margin: 16px 50px;
+  padding: 12px 22px;
   border-radius: 999px;
   background: var(--accent);
-  color: #fff;
+  color: #1a1a1a;
   font-weight: 600;
   width: fit-content;
 }
@@ -225,10 +225,9 @@ button:focus-visible {
 .drawer-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   min-height: var(--header-height);
-  padding: 0 8px 0 20px;
-  border-bottom: 1px solid var(--border);
+  padding: 0 8px 0 12px;
 }
 
 .drawer-title {
@@ -256,18 +255,57 @@ button:focus-visible {
   background: rgba(26, 26, 26, 0.05);
 }
 
-.account-body {
-  padding: 28px 20px;
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(36rem, 100%);
+}
+.auth-form > div:not(.auth-form-row),
+.auth-form-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.auth-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
-.account-status {
-  margin: 0 0 8px;
-  font-size: 1.15rem;
-  font-weight: 600;
-}
-
-.account-copy {
-  margin: 0 0 24px;
+.auth-form label {
+  font-size: 0.9rem;
   color: var(--text-muted);
+}
+
+.auth-form input,
+.auth-form select {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+
+.auth-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.auth-form .cta{
+  align-self: center;
+  margin:20px 0;
+}
+
+@media (max-width: 32rem) {
+  .auth-form-row {
+    grid-template-columns: 1fr;
+  }
 }
 

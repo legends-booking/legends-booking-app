@@ -1,15 +1,37 @@
 import { useEffect, useRef } from 'react'
-
+import { useNavigate } from 'react-router-dom'
+import type { User } from '../types'
 type SideNavProps = {
   open: boolean
-  onClose: () => void
+  onClose: () => void,
+  user: User | null
 }
 
 const LINKS = ['Home', 'Classes', 'Book', 'Account'] as const
 
-export function SideNav({ open, onClose }: SideNavProps) {
-  const closeRef = useRef<HTMLButtonElement>(null)
+type menuLinks ={menu: string, link: string}
 
+const MENU_BY_ROLE: Record<User['role'],menuLinks[]>={
+  "customer":[
+          {menu:"Bookings",link:"/bookings"},
+          {menu:"Account",link:"/profile"}
+        ],
+  "instructor":[
+          {menu:"Bookings",link:"/bookings"},
+          {menu:"Account",link:"/profile"}
+        ],
+  "admin":[
+          {menu:"Bookings",link:"/bookings"},
+          {menu:"Account",link:"/profile"},
+          {menu:"Members",link:"/members"},
+          {menu:"Sign Up New User", link:"/signup"}
+
+        ]
+}
+
+export function SideNav({ open, onClose, user }: SideNavProps) {
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const navigate = useNavigate()
   useEffect(() => {
     if (open) closeRef.current?.focus()
   }, [open])
@@ -18,15 +40,11 @@ export function SideNav({ open, onClose }: SideNavProps) {
     <aside
       className={`drawer drawer-left${open ? ' is-open' : ''}`}
       aria-hidden={!open}
-      aria-labelledby="menu-title"
       role="dialog"
       aria-modal={open}
       inert={!open}
     >
       <div className="drawer-header">
-        <p id="menu-title" className="drawer-title">
-          Menu
-        </p>
         <button
           ref={closeRef}
           type="button"
@@ -37,13 +55,26 @@ export function SideNav({ open, onClose }: SideNavProps) {
           <CloseIcon />
         </button>
       </div>
-      <nav className="drawer-nav" aria-label="Main">
-        {LINKS.map((label) => (
-          <button key={label} type="button" className="drawer-link" onClick={onClose}>
-            {label}
-          </button>
-        ))}
-      </nav>
+      {user?(<nav className="drawer-nav" aria-label="Main">
+      {MENU_BY_ROLE[user.role].map((item) => (
+        <button key={item.link} type="button" className="drawer-link" onClick={()=>{
+          onClose()
+          navigate(item.link)
+        }}>
+          {item.menu}
+        </button>
+      ))}
+    </nav>)
+      :(<button
+        type="button"
+        className="cta"
+        onClick={() => {
+          onClose()
+          navigate('/login')
+        }}
+      >
+        Sign In
+      </button>)}
     </aside>
   )
 }

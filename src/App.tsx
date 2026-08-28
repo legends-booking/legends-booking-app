@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { AccountPanel } from './components/AccountPanel'
 import { Header } from './components/Header'
 import { SideNav } from './components/SideNav'
 import type { User } from './types'
 import { SignIn } from './pages/SignIn'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
+import { NewUserSignUp } from './pages/NewUserSignUp'
 
 
 
-
-
-let user: User | null = null
-
-type Panel = 'menu' | 'account' | null
 
 function App() {
+
+  type Panel = 'menu' | 'account' | null
+
+  const navigate = useNavigate()
+  const [user, setUser] = useState<User | null>(null)
   const [panel, setPanel] = useState<Panel>(null)
   const lastFocus = useRef<HTMLElement | null>(null)
 
@@ -26,6 +26,11 @@ function App() {
   function openPanel(next: Exclude<Panel, null>) {
     lastFocus.current = document.activeElement as HTMLElement
     setPanel(next)
+  }
+
+  function onSignIn(currentUser: User) {
+    setUser(currentUser)
+    navigate('/')
   }
 
   useEffect(() => {
@@ -68,7 +73,8 @@ function App() {
       </main>
     }
   />
-  <Route path="/login" element={<SignIn />} />
+  <Route path="/login" element={<SignIn onSignIn={onSignIn} />} />
+  <Route path="/signup" element={<NewUserSignUp />} />
 </Routes>
       {panel ? (
         <button
@@ -78,8 +84,7 @@ function App() {
           onClick={closePanel}
         />
       ) : null}
-      <SideNav open={panel === 'menu'} onClose={closePanel} />
-      <AccountPanel open={panel === 'account'} onClose={closePanel} user={user} />
+      <SideNav open={panel === 'menu'} onClose={closePanel} user={user} />
     </div>
   )
 }
