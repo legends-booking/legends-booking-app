@@ -17,7 +17,19 @@ function App() {
   const [user, setUser] = useState<User | null>(null)
   const [panel, setPanel] = useState<Panel>(null)
   const lastFocus = useRef<HTMLElement | null>(null)
-
+  const UPCOMING = [
+    {
+      date: 'Thu 4 Sep',
+      classes: [
+        { name: 'Kickboxing', time: '18:00' },
+        { name: 'Boxing', time: '19:30' },
+      ],
+    },
+    {
+      date: 'Sat 6 Sep',
+      classes: [{ name: 'MMA', time: '10:00' }],
+    },
+  ]
   const closePanel = useCallback(() => {
     setPanel(null)
     lastFocus.current?.focus()
@@ -61,15 +73,31 @@ function App() {
   <Route
     path="/"
     element={
-      <main className="landing">
-        <article className="card">Kickboxing</article>
-        <article className="card">Boxing</article>
-        <article className="card">Muay Thai</article>
-        <article className="card">MMA</article>
-        <article className="card">Wrestling</article>
-        <article className="card">Judo</article>
-        <article className="card">Jiu-Jitsu</article>
-        <article className="card">Wrestling</article>
+      <main className={user? " landing landing-schedule":"landing"}>
+        {user?(
+          <>
+          <h1 className="schedule-heading">Upcoming Classes</h1>
+          {
+            UPCOMING.map((activity) =>(
+              <section key={activity.date} className="schedule-day">
+              <article className="card card-date">{activity.date}</article>
+              {activity.classes.map((cls) => (
+                <article key={`${activity.date}-${cls.name}`} className="card">
+                  <span>{cls.name}</span>
+                  <span className="card-time">{cls.time}</span>
+                </article>
+              ))}
+            </section>
+          ))
+          }
+          </>
+        ):(
+          <>
+          <button type="button" className="cta" onClick={() => navigate('/login')}>
+            Sign in to book
+          </button>
+          </>
+        )}
       </main>
     }
   />

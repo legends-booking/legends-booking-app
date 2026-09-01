@@ -37,7 +37,7 @@ export function NewUserSignUp() {
                         <option value="2">2</option>
                     </select>
                 </div>
-                <button type="button" className="cta">
+                <button type="submit" className="cta">
                     Sign Up
                 </button>
             </form>
