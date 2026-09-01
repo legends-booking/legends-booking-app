@@ -7,7 +7,6 @@ type SideNavProps = {
   user: User | null
 }
 
-const LINKS = ['Home', 'Classes', 'Book', 'Account'] as const
 
 type menuLinks ={menu: string, link: string}
 

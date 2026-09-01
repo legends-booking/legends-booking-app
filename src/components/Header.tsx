@@ -1,9 +1,8 @@
 type HeaderProps = {
   onOpenMenu: () => void
-  onOpenAccount: () => void
 }
 
-export function Header({ onOpenMenu, onOpenAccount }: HeaderProps) {
+export function Header({ onOpenMenu }: HeaderProps) {
   return (
     <header className="site-header">
       <button

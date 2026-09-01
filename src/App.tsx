@@ -67,7 +67,6 @@ function App() {
     <div className="app">
       <Header
         onOpenMenu={() => openPanel('menu')}
-        onOpenAccount={() => openPanel('account')}
       />
       <Routes>
   <Route
