@@ -1,121 +1,118 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Header } from './components/Header'
+import { SideNav } from './components/SideNav'
+import type { User } from './types'
+import { SignIn } from './pages/SignIn'
+import { Routes, Route, useNavigate } from 'react-router-dom'
+import { NewUserSignUp } from './pages/NewUserSignUp'
+
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  type Panel = 'menu' | 'account' | null
+
+  const navigate = useNavigate()
+  const [user, setUser] = useState<User | null>(null)
+  const [panel, setPanel] = useState<Panel>(null)
+  const lastFocus = useRef<HTMLElement | null>(null)
+  const UPCOMING = [
+    {
+      date: 'Thu 4 Sep',
+      classes: [
+        { name: 'Kickboxing', time: '18:00' },
+        { name: 'Boxing', time: '19:30' },
+      ],
+    },
+    {
+      date: 'Sat 6 Sep',
+      classes: [{ name: 'MMA', time: '10:00' }],
+    },
+  ]
+  const closePanel = useCallback(() => {
+    setPanel(null)
+    lastFocus.current?.focus()
+  }, [])
+
+  function openPanel(next: Exclude<Panel, null>) {
+    lastFocus.current = document.activeElement as HTMLElement
+    setPanel(next)
+  }
+
+  function onSignIn(currentUser: User) {
+    setUser(currentUser)
+    navigate('/')
+  }
+
+  useEffect(() => {
+    if (!panel) return
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') closePanel()
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [panel, closePanel])
+
+  useEffect(() => {
+    document.body.style.overflow = panel ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [panel])
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
+    <div className="app">
+      <Header
+        onOpenMenu={() => openPanel('menu')}
+      />
+      <Routes>
+  <Route
+    path="/"
+    element={
+      <main className={user? " landing landing-schedule":"landing"}>
+        {user?(
+          <>
+          <h1 className="schedule-heading">Upcoming Classes</h1>
+          {
+            UPCOMING.map((activity) =>(
+              <section key={activity.date} className="schedule-day">
+              <article className="card card-date">{activity.date}</article>
+              {activity.classes.map((cls) => (
+                <article key={`${activity.date}-${cls.name}`} className="card">
+                  <span>{cls.name}</span>
+                  <span className="card-time">{cls.time}</span>
+                </article>
+              ))}
+            </section>
+          ))
+          }
+          </>
+        ):(
+          <>
+          <button type="button" className="cta" onClick={() => navigate('/login')}>
+            Sign in to book
+          </button>
+          </>
+        )}
+      </main>
+    }
+  />
+  <Route path="/login" element={<SignIn onSignIn={onSignIn} />} />
+  <Route path="/signup" element={<NewUserSignUp />} />
+</Routes>
+      {panel ? (
         <button
           type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+          className="overlay"
+          aria-label="Close"
+          onClick={closePanel}
+        />
+      ) : null}
+      <SideNav open={panel === 'menu'} onClose={closePanel} user={user} />
+    </div>
   )
 }
 
