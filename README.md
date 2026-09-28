@@ -1,32 +1,21 @@
-# React + TypeScript + Vite
+# Legends Booking App
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A gym booking app for signing in, browsing upcoming classes, and viewing membership packages. It is a progressive web app, so it can be installed and opened like a native app.
 
-Currently, two official plugins are available:
+Built with React, TypeScript, and Vite. Routing is handled by React Router. Vite plugins:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react) for React fast refresh
+- [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) for the installable app manifest and service worker
 
-## React Compiler
+Linting uses [Oxlint](https://oxc.rs/docs/guide/usage/linter).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Start the server
 
-## Expanding the Oxlint configuration
+Copy `.env.example` to `.env` and set `VITE_BOOKING_SERVICE_URL` to the booking service. Membership packages are loaded from that URL.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+The app is served at [http://localhost:5173](http://localhost:5173).

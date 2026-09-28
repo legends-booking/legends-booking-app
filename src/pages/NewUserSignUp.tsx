@@ -9,7 +9,7 @@ export function NewUserSignUp() {
 
     return(
         <main className="landing">
-            <form  className="auth-form" onSubmit={handleSubmit}>
+            <form  className="auth-form" onSubmit={handleSubmit} noValidate>
                 <div className="auth-form-row">
                     <div>
                         <label htmlFor="firstName">First Name</label>

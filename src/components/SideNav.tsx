@@ -23,7 +23,8 @@ const MENU_BY_ROLE: Record<User['role'],menuLinks[]>={
           {menu:"Bookings",link:"/bookings"},
           {menu:"Account",link:"/profile"},
           {menu:"Members",link:"/members"},
-          {menu:"Sign Up New User", link:"/signup"}
+          {menu:"Sign Up New User", link:"/signup"},
+          {menu:"Packages", link:"/packages"}
 
         ]
 }
