@@ -44,7 +44,7 @@ export function NewUserSignUp() {
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault()
-        console.log(firstName, lastName, email, mobile, plan)
+        //to have integration with backend later
     }
 }
 

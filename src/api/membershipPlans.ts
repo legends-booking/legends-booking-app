@@ -16,7 +16,6 @@ export async function createMembership(body: FormData): Promise<Membership> {
   })
   const data = await response.json()
   if (!response.ok) {
-    console.log(data)
     throw new Error(data.error)
   }
   return data

@@ -3,27 +3,22 @@ import { useState, useEffect } from 'react'
 import { getMemberships } from '../api/membershipPlans'
 import { NewMembershipPlan } from '../components/NewMembershipPlan'
 
-
-
-
-
 export function MembershipPlans({user}: {user: User|null}) {
   const [memberships, setMemberships] = useState<Membership[]>([])
   const [adding, setAdding] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   
   useEffect(() => {
    getMemberships()
     .then(setMemberships)
-    .catch(console.error)
+    .catch(() => setError('Failed to fetch memberships'))
   },[])
 
   function membershipImageSrc(image: string) {
     if (image.startsWith('http')) return image
-    return `${import.meta.env.VITE_BOOKING_SERVICE_URL}${image}`
+    return `${import.meta.env.BOOKING_SERVICE_URL}${image}`
   }
-
-  
   
   return (
   <>
@@ -37,7 +32,9 @@ export function MembershipPlans({user}: {user: User|null}) {
         ) : null}
       </div>
 
-      {memberships.length === 0 ? (
+      {error ? (
+        <p className="lede">{error}</p>
+      ) : memberships.length === 0 ? (
         <p className="lede">No packages yet. Contact club admin.</p>
       ) : (
         <ul className="product-grid">

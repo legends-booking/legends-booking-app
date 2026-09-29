@@ -11,6 +11,6 @@ export type Membership = {
   description: string
   image: string
   price: number
-  duration: number,
+  duration: number
   class_credits: number
 }
