@@ -17,7 +17,7 @@ export function MembershipPlans({user}: {user: User|null}) {
 
   function membershipImageSrc(image: string) {
     if (image.startsWith('http')) return image
-    return `${import.meta.env.BOOKING_SERVICE_URL}${image}`
+    return `${import.meta.env.VITE_BOOKING_SERVICE_URL}${image}`
   }
   
   return (
