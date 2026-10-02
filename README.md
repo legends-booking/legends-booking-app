@@ -11,7 +11,7 @@ Linting uses [Oxlint](https://oxc.rs/docs/guide/usage/linter).
 
 ## Start the server
 
-Copy `.env.example` to `.env` and set `VITE_BOOKING_SERVICE_URL` to the booking service. Membership packages are loaded from that URL.
+Copy `.env.example` to `.env` and set `BOOKING_SERVICE_URL` to the booking service. Membership packages are loaded from that URL.
 
 ```bash
 npm install
