@@ -448,10 +448,6 @@ button:focus-visible {
   }
 }
 
-.required-mark {
-  color: var(--gold);
-}
-
 .auth-form div:has(:required) > label:not(.choice)::after {
   content: " *";
   color: var(--gold);
@@ -476,11 +472,6 @@ button:focus-visible {
   margin: 0 0 8px;
 }
 
-.member-lede {
-  margin: 0;
-  color: var(--text);
-  font-size: 1.15rem;
-}
 .member-card {
   font-size: 1.15rem;
   display: flex;
@@ -499,12 +490,6 @@ button:focus-visible {
   grid-template-columns: 1fr 1fr;
   gap: 28px 48px;
   margin: 8px 0 12px;
-}
-
-.member-card > div {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }
 
 .member-card dt {
