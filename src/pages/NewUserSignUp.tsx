@@ -92,7 +92,7 @@ export function NewUserSignUp() {
                 </div>
                 <div>
                 <dt>Package</dt>
-                <dd>{membership.name}</dd>
+                <dd>{membership?.name}</dd>
                 </div>
               </dl>
               <button type="button" className="cta" onClick={resetForm}>
