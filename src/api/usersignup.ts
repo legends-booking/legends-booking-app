@@ -9,7 +9,11 @@ export async function createUser(body: Record<string, string>): Promise<{user: U
         },
         body: JSON.stringify(body)
     })
-    if(!response.ok){
+    if(response.status === 400){
+        const responseData = await response.json()
+        throw new Error(responseData.error)
+    }
+    else if(!response.ok){
         throw new Error('Failed to create user')
     }
     return response.json()

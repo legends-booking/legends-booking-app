@@ -55,8 +55,7 @@ export function NewUserSignUp() {
         createUser(payload).then((response) => {
            setCreatedUser(response.user)
         }).catch((error) => {
-            console.error(error)
-            setError('Failed to create user')
+            setError(error.message)
         })
     }
 
