@@ -3,7 +3,7 @@ import { Header } from './components/Header'
 import { SideNav } from './components/SideNav'
 import type { User } from './types'
 import { SignIn } from './pages/SignIn'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import { NewUserSignUp } from './pages/NewUserSignUp'
 import { MembershipPlans } from './pages/MembershipPlans'
 
@@ -101,7 +101,10 @@ function App() {
     }
   />
   <Route path="/login" element={<SignIn onSignIn={onSignIn} />} />
-  <Route path="/signup" element={<NewUserSignUp />} />
+  <Route path="/signup" element={
+    user?.role === 'admin'?<NewUserSignUp/>
+    :<Navigate to="/" replace/>} 
+  />
   <Route path="/packages" element={<MembershipPlans user={user} />} />
 </Routes>
       {panel ? (

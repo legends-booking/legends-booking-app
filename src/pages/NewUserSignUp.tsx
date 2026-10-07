@@ -1,37 +1,59 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useState,useRef, type FormEvent } from 'react'
 import type { User } from '../types'
 import {createUser} from '../api/usersignup'
 import type { Membership } from '../types'
 import { getMemberships } from '../api/membershipPlans'
 
 export function NewUserSignUp() {
+    const ROLES = [
+        ['customer', 'Customer'],
+        ['admin', 'Admin'],
+        ['instructor', 'Instructor']] as const
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [mobile, setMobile] = useState('')
     const [plan, setPlan] = useState('')
+    const [role, setRole] = useState<User['role']>('customer')
     const [createdUser, setCreatedUser] = useState<User | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [memberships, setMemberships] = useState<Membership[]>([])
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
+    const [planOpen, setPlanOpen] = useState(false)
+    const planPickerRef = useRef<HTMLDivElement>(null)
+    
+    useEffect(() => {
+        
+            getMemberships().then((memberships) => {
+                setMemberships(memberships)
+            })
+
+    }, [])
 
     useEffect(() => {
-        getMemberships().then((memberships) => {
-            setMemberships(memberships)
-        })
-    }, [])
+        if (!planOpen) return
+            function onPointerDown(event: PointerEvent) {
+                if (!planPickerRef.current?.contains(event.target as Node)) {
+                    setPlanOpen(false)
+                }
+        }
+        document.addEventListener('pointerdown', onPointerDown)
+        return () => document.removeEventListener('pointerdown', onPointerDown)
+    },[planOpen])
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault()
-        const user: User = {
-            id: '',
-            role: 'customer',
+        const payload ={
             name,
             email,
             mobile,
-            plan
+            role,
+            plan,
+            startDate,
+            endDate
         }
-        createUser(user).then((response) => {
+        createUser(payload).then((response) => {
            setCreatedUser(response.user)
-           response.user.name.split(' ')[0]
         }).catch((error) => {
             console.error(error)
             setError('Failed to create user')
@@ -43,10 +65,11 @@ export function NewUserSignUp() {
         setEmail('')
         setMobile('')
         setPlan('')
+        setStartDate('')
+        setEndDate('')
         setCreatedUser(null)
         setError(null)
     }
-
     if (createdUser) {
         const firstName = createdUser.name.split(' ')[0]
         const membership = memberships.find(
@@ -82,7 +105,10 @@ export function NewUserSignUp() {
       }
         return(
             <main className="landing">
+                
                 <form className="auth-form" onSubmit={handleSubmit}>
+                    <h1>Add New User</h1>
+                    {error ?<p className="form-error" role="alert">{error} </p>:null}
                     <div>
                         <label htmlFor="name">Full Name</label>
                         <input type="text" id="name" required value={name} onChange={(e) => setName(e.target.value)} />
@@ -96,13 +122,61 @@ export function NewUserSignUp() {
                         <input type="tel" id="mobile" required value={mobile} onChange={(e) => setMobile(e.target.value)} />
                     </div>
                     <div>
-                        <label htmlFor="plan">Plan</label>
-                        <select id="plan" required value={plan} onChange={(e) => setPlan(e.target.value)}>
-                        <option value="">Select a plan</option>
-                        {memberships.map((membership) => (
-                            <option key={membership.id} value={membership.id}>{membership.name}</option>
-                        ))}
-                        </select>
+                        <span id="role-label">Role</span>
+                        <div className="choice-row" role="radiogroup" aria-labelledby="role-label">
+                            {ROLES.map(([value, label]) => (
+                            <label key={value} className="choice">
+                                <input
+                                type="radio"
+                                name="role"
+                                value={value}
+                                checked={role === value}
+                                onChange={() => setRole(value)}
+                                required
+                                />
+                                {label}
+                            </label>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="plan-picker" ref={planPickerRef}>
+                        <button
+                            type="button"
+                            className="plan-picker-button"
+                            aria-expanded={planOpen}
+                            onClick={() => setPlanOpen((open) => !open)}
+                        >
+                            {memberships.find((membership) => membership.id === plan)?.name ?? 'Select a plan'}
+                        </button>
+                        {planOpen ? (
+                            <ul className="plan-picker-menu" role="listbox">
+                            {memberships.map((membership) => (
+                                <li key={membership.id}>
+                                <button
+                                    type="button"
+                                    role="option"
+                                    aria-selected={plan === membership.id}
+                                    onClick={() => {
+                                    setPlan(membership.id)
+                                    setPlanOpen(false)
+                                    }}
+                                >
+                                    {membership.name}
+                                </button>
+                                </li>
+                            ))}
+                            </ul>
+                        ) : null}
+                    </div>
+                    <div className="auth-form-row">
+                        <div>
+                            <label htmlFor="start-date">MembershipStart Date</label>
+                            <input type="date" id="startDate" required value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                        </div>
+                        <div>
+                            <label htmlFor="end-date">Membership End Date</label>
+                            <input type="date" id="endDate" required value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                        </div>
                     </div>
                     <button type="submit" className="cta">Sign Up</button>
                 </form>
