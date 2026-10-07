@@ -466,3 +466,77 @@ button:focus-visible {
   color: var(--text);
 }
 
+.landing-confirm {
+  justify-content: flex-start;
+  padding-top: 10vh;
+}
+
+.landing-confirm h1 {
+  align-self: flex-start;
+  margin: 0 0 8px;
+}
+
+.member-lede {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.15rem;
+}
+.member-card {
+  font-size: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0;
+  padding: 28px 32px;
+  background: #2e2824;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: min(52rem, 100%);
+  animation: member-in 0.35s ease;
+}
+.member-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px 48px;
+  margin: 8px 0 12px;
+}
+
+.member-card > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.member-card dt {
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.member-card dd {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.member-card .cta {
+  align-self: flex-start;
+  margin: 12px 0 0;
+}
+@keyframes member-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-width: 32rem) {
+  .member-details {
+    grid-template-columns: 1fr;
+  }
+}
