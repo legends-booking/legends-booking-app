@@ -13,12 +13,15 @@ export function SignIn({ onSignIn }: SignInProps) {
 
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
-    onSignIn({
-      id: '1',
+    const user: User = {
+      id: '',
+      role: 'admin',
       name: email.split('@')[0] || 'Member',
       email,
-      role: 'admin',
-    })
+      mobile: '',
+      plan: '',
+    }
+    onSignIn(user)
     navigate('/')
   }
 

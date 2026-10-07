@@ -2,6 +2,8 @@ export type User = {
   id: string
   name: string
   email: string
+  mobile: string
+  plan: string
   role: 'admin' | 'instructor' | 'customer'
 }
 
