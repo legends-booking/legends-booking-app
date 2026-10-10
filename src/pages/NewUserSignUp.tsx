@@ -4,6 +4,9 @@ import {createUser} from '../api/usersignup'
 import type { Membership } from '../types'
 import { getMemberships } from '../api/membershipPlans'
 
+
+
+
 export function NewUserSignUp() {
     const ROLES = [
         ['customer', 'Customer'],
@@ -41,7 +44,7 @@ export function NewUserSignUp() {
         return () => document.removeEventListener('pointerdown', onPointerDown)
     },[planOpen])
 
-    function handleSubmit(e: FormEvent) {
+    const  handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         const payload ={
             name,
@@ -52,11 +55,12 @@ export function NewUserSignUp() {
             startDate,
             endDate
         }
-        createUser(payload).then((response) => {
-           setCreatedUser(response.user)
-        }).catch((error) => {
-            setError(error.message)
-        })
+        try {
+        const { user } = await createUser(payload);
+        setCreatedUser(user)
+        } catch (err) {
+        setError((err as Error).message); // e.g. the backend's `error` text for a 400
+        }
     }
 
     function resetForm(){
@@ -169,11 +173,11 @@ export function NewUserSignUp() {
                     </div>
                     <div className="auth-form-row">
                         <div>
-                            <label htmlFor="start-date">MembershipStart Date</label>
+                            <label htmlFor="startDate">MembershipStart Date</label>
                             <input type="date" id="startDate" required value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                         </div>
                         <div>
-                            <label htmlFor="end-date">Membership End Date</label>
+                            <label htmlFor="endDate">Membership End Date</label>
                             <input type="date" id="endDate" required value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                         </div>
                     </div>

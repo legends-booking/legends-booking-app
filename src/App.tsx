@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Header } from './components/Header'
 import { SideNav } from './components/SideNav'
-import type { User } from './types'
+import { useAuth } from './useAuth'
 import { SignIn } from './pages/SignIn'
-import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import { NewUserSignUp } from './pages/NewUserSignUp'
 import { MembershipPlans } from './pages/MembershipPlans'
+import { ProtectedRoute } from './ProtectedRoutes'
 
 
 
@@ -14,9 +15,10 @@ function App() {
   type Panel = 'menu' | 'account' | null
 
   const navigate = useNavigate()
-  const [user, setUser] = useState<User | null>(null)
+  
   const [panel, setPanel] = useState<Panel>(null)
   const lastFocus = useRef<HTMLElement | null>(null)
+  const { user } = useAuth()
   const UPCOMING = [
     {
       date: 'Thu 4 Sep',
@@ -40,10 +42,7 @@ function App() {
     setPanel(next)
   }
 
-  function onSignIn(currentUser: User) {
-    setUser(currentUser)
-    navigate('/')
-  }
+ 
 
   useEffect(() => {
     if (!panel) return
@@ -100,11 +99,10 @@ function App() {
       </main>
     }
   />
-  <Route path="/login" element={<SignIn onSignIn={onSignIn} />} />
-  <Route path="/signup" element={
-    user?.role === 'admin'?<NewUserSignUp/>
-    :<Navigate to="/" replace/>} 
-  />
+  <Route path="/login" element={<SignIn/>} />
+  <Route element={<ProtectedRoute roles={['admin']} />}>
+    <Route path="/signup" element={<NewUserSignUp />} />
+  </Route>
   <Route path="/packages" element={<MembershipPlans user={user} />} />
 </Routes>
       {panel ? (
