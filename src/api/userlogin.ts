@@ -1,5 +1,5 @@
 import type { User } from '../types';
-import { setAccessToken } from './jwt';
+import { setAccessToken } from './apiHandler';
 
 const BOOKING_SERVICE_URL = import.meta.env.VITE_BOOKING_SERVICE_URL;
 

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Header } from './components/Header'
 import { SideNav } from './components/SideNav'
-import { useAuth } from './useAuth'
+import { useAuth } from './context/useAuth'
 import { SignIn } from './pages/SignIn'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { NewUserSignUp } from './pages/NewUserSignUp'

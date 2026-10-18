@@ -1,5 +1,5 @@
 import type { User } from '../types';
-import { apiJson } from './jwt';
+import { apiJson } from './apiHandler';
 
 export const createUser = (body: Record<string, string>) =>
   apiJson<{ user: User; token: string }>('/members', { method: 'POST', body });

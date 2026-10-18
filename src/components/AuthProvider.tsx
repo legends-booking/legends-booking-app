@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import type { User } from './types';
-import { api, refreshSession, setAccessToken } from './api/jwt';
-import { userLogin } from './api/userlogin';
-import { AuthContext, type Status } from './AuthContext';
+import type { User } from '../types';
+import { api, refreshSession, setAccessToken } from '../api/apiHandler';
+import { userLogin } from '../api/userlogin';
+import { AuthContext, type Status } from '../context/AuthContext';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);

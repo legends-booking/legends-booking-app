@@ -23,7 +23,7 @@ export const refreshSession = (): Promise<User | null> =>
       });
       if (!res.ok) { accessToken = null; return null; }
       const data = await res.json();
-      accessToken = data.accessToken ?? data.token?.accessToken ?? null;
+      setAccessToken(data.accessToken ?? data.token?.accessToken ?? null);
       return data.user ?? null;
     } catch {
       return null;
@@ -44,11 +44,12 @@ export async function apiJson<T>(
   path: string,
   { body, ...init }: Omit<RequestInit, 'body'> & { body?: unknown } = {}
 ): Promise<T> {
+  const isForm = body instanceof FormData
   const res = await api(path, {
     ...init,
-    headers: { 'Content-Type': 'application/json', ...init.headers },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
+    headers: isForm ? init.headers : { 'Content-Type': 'application/json', ...init.headers },
+    body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
+  })
 
   if (!res.ok) {
     const data = await res.json().catch(() => null);
