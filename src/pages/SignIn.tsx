@@ -1,38 +1,34 @@
 import { useState, type SubmitEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
-import type { User } from '../types'
+import { useAuth } from '../useAuth'
+import {useNavigate}  from 'react-router-dom'
 
-type SignInProps = {
-  onSignIn: (user: User) => void
-}
 
-export function SignIn({ onSignIn }: SignInProps) {
-  const navigate = useNavigate()
+export function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const { login } = useAuth();
+  const navigate = useNavigate()
 
-  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
-    const user: User = {
-      id: '',
-      role: 'admin',
-      name: email.split('@')[0] || 'Member',
-      email,
-      mobile: '',
-      plan: '',
+    try {
+      await login(email, password)
+      navigate('/')
+    } catch (err) {
+      setError((err as Error).message)
     }
-    onSignIn(user)
-    navigate('/')
   }
 
   return (
     <main className="landing">
       <form className="auth-form" onSubmit={handleSubmit}>
         <h1>Sign in</h1>
+        {error ?<p className="form-error" role="alert">{error} </p>:null}
         <label>
           Email
           <input
-            type="email"
+            type="email" 
             name="email"
             autoComplete="email"
             required
