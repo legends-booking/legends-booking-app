@@ -639,13 +639,16 @@ button:focus-visible {
 
 
 .placeholder {
+  width: 100%;
   background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite;
   border-radius: 8px;
 }
-.placeholder-heading { height: 28px; width: 55%; margin-bottom: 16px; }
-.placeholder-card    { height: 56px; margin-bottom: 8px; }
+
+
+.placeholder-heading { align-self: flex-start; width: 55%; height: 26px; margin: 4px 0 32px; }
+.placeholder-product { height: 280px; }
 
 @keyframes shimmer {
   from { background-position: 200% 0; }
@@ -655,5 +658,3 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .placeholder { animation: none; }
 }
-
-.placeholder-product { height: 280px; }
