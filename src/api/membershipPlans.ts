@@ -11,5 +11,5 @@ import { apiJson } from "./apiHandler";
 
 
 export const createMembership = (body: FormData) =>
-  apiJson<Membership>('/mebership-plans',{method: 'POST', body})
+  apiJson<Membership>('/membership-plans',{method: 'POST', body})
 

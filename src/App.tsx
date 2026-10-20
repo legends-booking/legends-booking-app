@@ -7,6 +7,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import { NewUserSignUp } from './pages/NewUserSignUp'
 import { MembershipPlans } from './pages/MembershipPlans'
 import { ProtectedRoute } from './ProtectedRoutes'
+import { ScheduleLoading } from './components/ScheduleLoading'
 
 
 
@@ -18,7 +19,7 @@ function App() {
   
   const [panel, setPanel] = useState<Panel>(null)
   const lastFocus = useRef<HTMLElement | null>(null)
-  const { user } = useAuth()
+  const { user , status} = useAuth()
   const UPCOMING = [
     {
       date: 'Thu 4 Sep',
@@ -61,50 +62,50 @@ function App() {
       document.body.style.overflow = ''
     }
   }, [panel])
-
   return (
     <div className="app">
-      <Header
-        onOpenMenu={() => openPanel('menu')}
-      />
+      <Header onOpenMenu={() => openPanel('menu')}/>
       <Routes>
-  <Route
-    path="/"
-    element={
-      <main className={user? " landing landing-schedule":"landing"}>
-        {user?(
-          <>
-          <h1 className="schedule-heading">Upcoming Classes</h1>
-          {
-            UPCOMING.map((activity) =>(
-              <section key={activity.date} className="schedule-day">
-              <article className="card card-date">{activity.date}</article>
-              {activity.classes.map((cls) => (
-                <article key={`${activity.date}-${cls.name}`} className="card">
-                  <span>{cls.name}</span>
-                  <span className="card-time">{cls.time}</span>
-                </article>
-              ))}
-            </section>
-          ))
+        <Route
+          path="/"
+          element={
+            status === 'loading' ? <ScheduleLoading /> :(
+            <main className="landing page">
+              {user?(
+                <>
+                <h1 className="page-heading">Upcoming Classes</h1>
+                {
+                  UPCOMING.map((activity) =>(
+                    <section key={activity.date} className="schedule-day">
+                    <article className="card card-date">{activity.date}</article>
+                    {activity.classes.map((cls) => (
+                      <button type="button" key={`${activity.date}-${cls.name}`}
+                        className="card card-class" onClick={() => {}}>
+                        <span>{cls.name}</span>
+                        <span className="card-time">{cls.time}</span>
+                      </button>
+                    ))}
+                  </section>
+                ))
+                }
+                </>
+              ):(
+                <>
+                <button type="button" className="cta" onClick={() => navigate('/login')}>
+                  Sign in to book
+                </button>
+                </>
+              )}
+            </main>)
+            
           }
-          </>
-        ):(
-          <>
-          <button type="button" className="cta" onClick={() => navigate('/login')}>
-            Sign in to book
-          </button>
-          </>
-        )}
-      </main>
-    }
-  />
-  <Route path="/login" element={<SignIn/>} />
-  <Route element={<ProtectedRoute roles={['admin']} />}>
-    <Route path="/signup" element={<NewUserSignUp />} />
-  </Route>
-  <Route path="/packages" element={<MembershipPlans user={user} />} />
-</Routes>
+        />
+        <Route path="/login" element={<SignIn/>} />
+        <Route element={<ProtectedRoute roles={['admin']} />}>
+          <Route path="/signup" element={<NewUserSignUp />} />
+        </Route>
+        <Route path="/packages" element={<MembershipPlans user={user} />} />
+      </Routes>
       {panel ? (
         <button
           type="button"
