@@ -2,17 +2,22 @@ import type { Membership, User } from '../types'
 import { useState, useEffect } from 'react'
 import { getMemberships } from '../api/membershipPlans'
 import { NewMembershipPlan } from '../components/NewMembershipPlan'
+import { useAuth } from '../context/useAuth'
 
 export function MembershipPlans({user}: {user: User|null}) {
   const [memberships, setMemberships] = useState<Membership[]>([])
+  const [loading, setLoading] = useState(true)   
   const [adding, setAdding] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
+  const { status } = useAuth()
   
   useEffect(() => {
-   getMemberships()
-    .then(setMemberships)
-    .catch(() => setError('Failed to fetch memberships'))
+    let cancelled = false
+    getMemberships()
+      .then((data) => { if (!cancelled) setMemberships(data) })
+      .catch(() => { if (!cancelled) setError('Failed to fetch memberships') })
+      .finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
   },[])
 
   function membershipImageSrc(image: string) {
@@ -22,19 +27,27 @@ export function MembershipPlans({user}: {user: User|null}) {
   
   return (
   <>
-    <main className="landing landing-schedule catalog">
-      <div className="catalog-header">
-        <h1 className="schedule-heading">Packages</h1>
-        {user?.role === 'admin' ? (
-          <button type="button" className="cta" onClick={() => setAdding(true)}>
-            Add Package
-          </button>
-        ) : null}
-      </div>
-
-      {error ? (
-        <p className="lede">{error}</p>
-      ) : memberships.length === 0 ? (
+    <main className="landing page catalog" aria-busy={loading}>
+        <div className="catalog-header">
+          <h1 className="page-heading">Packages</h1>
+          {status !== 'loading' && user?.role === 'admin' ? (
+            <button type="button" className="cta" onClick={() => setAdding(true)}>
+              Add Package
+            </button>
+          ) : null}
+        </div>
+        {loading ? (
+          <ul className="product-grid" aria-label="Loading packages">
+            {[0, 1, 2].map((i) => (
+              <li key={i}>
+                <div className="placeholder placeholder-product" />
+              </li>
+            ))}
+          </ul>
+        ) : 
+          error ? (
+            <p className="lede">{error}</p>
+          ) : memberships.length === 0 ? (
         <p className="lede">No packages yet. Contact club admin.</p>
       ) : (
         <ul className="product-grid">
