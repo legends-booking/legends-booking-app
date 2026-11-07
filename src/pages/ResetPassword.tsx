@@ -146,9 +146,3 @@ export function SetPasswordPage({ purpose }: { purpose: Purpose }) {
 // Route wrappers: one component, two URLs
 export const InvitePage = () => <SetPasswordPage purpose="invite" />
 export const ResetPasswordPage = () => <SetPasswordPage purpose="password_reset" />
-
-/*
-  Routes:
-    <Route path="/invite" element={<InvitePage />} />
-    <Route path="/reset-password" element={<ResetPasswordPage />} />
-*/
