@@ -8,6 +8,8 @@ import { NewUserSignUp } from './pages/NewUserSignUp'
 import { MembershipPlans } from './pages/MembershipPlans'
 import { ProtectedRoute } from './ProtectedRoutes'
 import { ScheduleLoading } from './components/ScheduleLoading'
+import { InvitePage, ResetPasswordPage } from './pages/ResetPassword'
+import { ForgotPassword } from './pages/ForgotPassword'
 
 
 
@@ -101,10 +103,14 @@ function App() {
           }
         />
         <Route path="/login" element={<SignIn/>} />
+        <Route path="/reset-password" element={<ResetPasswordPage/>} />
+        <Route path="/invite" element={<InvitePage/>} />
+        <Route path="/packages" element={<MembershipPlans user={user} />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route element={<ProtectedRoute roles={['admin']} />}>
           <Route path="/signup" element={<NewUserSignUp />} />
         </Route>
-        <Route path="/packages" element={<MembershipPlans user={user} />} />
+        
       </Routes>
       {panel ? (
         <button

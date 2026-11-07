@@ -1,6 +1,6 @@
 import { useState, type SubmitEvent } from 'react'
 import { useAuth } from '../useAuth'
-import {useNavigate}  from 'react-router-dom'
+import {Link, useNavigate}  from 'react-router-dom'
 
 
 export function SignIn() {
@@ -47,6 +47,9 @@ export function SignIn() {
             onChange={(event) => setPassword(event.target.value)}
           />
         </label>
+        <Link to="/forgot-password" className="auth-link">
+          Forgot password?
+        </Link>
         <button type="submit" className="cta">
           Sign in
         </button>

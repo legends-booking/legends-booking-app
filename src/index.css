@@ -63,7 +63,7 @@ button:focus-visible {
   inset: 0;
   background: url('/legends%20logo.png') center / contain no-repeat;
   mix-blend-mode: difference; /* still inverts with light/dark */
-  opacity: 0.25; /* lower = more see-through */
+  opacity: 0.1; /* lower = more see-through */
   pointer-events: none;
   z-index: 0;
 }
@@ -278,6 +278,24 @@ button:focus-visible {
 .auth-form .cta{
   align-self: center;
   margin:20px 0;
+}
+
+.auth-link {
+  align-self: flex-start;
+  font-size: 1rem;
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.auth-link:hover {
+  color: var(--text);
+}
+
+.auth-link:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 @media (max-width: 32rem) {
