@@ -10,6 +10,7 @@ import { ProtectedRoute } from './ProtectedRoutes'
 import { ScheduleLoading } from './components/ScheduleLoading'
 import { InvitePage, ResetPasswordPage } from './pages/ResetPassword'
 import { ForgotPassword } from './pages/ForgotPassword'
+import { Dock } from './components/Dock'
 
 
 
@@ -121,6 +122,7 @@ function App() {
         />
       ) : null}
       <SideNav open={panel === 'menu'} onClose={closePanel} user={user} />
+      <Dock unreadCount={1} user={user} />
     </div>
   )
 }

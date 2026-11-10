@@ -10,6 +10,11 @@
   --tap: 2.75rem;
   --overlay: rgba(0, 0, 0, 0.5);
   --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --dock-height: 56px;
+  --gold: #c9a96e;
+  --dock-bg: #1a1a1a;
+  --dock-border: #3a342c;
+  --dock-idle: #8a8a8a;
   color-scheme: dark;
 }
 
@@ -675,4 +680,68 @@ button:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .placeholder { animation: none; }
+}
+
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  height: calc(var(--dock-height) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--dock-bg);
+  border-top: 0.5px solid var(--dock-border);
+}
+
+.dock__tab {
+  flex: 1;
+  min-width: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--dock-idle);
+  text-decoration: none;
+  font-size: 11px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dock__tab.is-active {
+  color: var(--gold);
+}
+
+.dock__tab:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: -4px;
+  border-radius: 8px;
+}
+
+.dock__icon {
+  position: relative;
+  display: flex;
+}
+
+.dock__badge {
+  position: absolute;
+  top: -4px;
+  left: 18px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--gold);
+  color: #1a1a1a;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+
+.has-dock {
+  padding-bottom: calc(var(--dock-height) + env(safe-area-inset-bottom, 0px) + 16px);
 }
