@@ -14,8 +14,8 @@ const TABS = [
 function useKeyboardOpen() {
     const [open, setOpen] = useState(false);
     useEffect(() => {
-      const isField = (el) => el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
-      const onIn = (e) => isField(e.target) && setOpen(true);
+      const isField = (el: EventTarget | null) => el instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
+      const onIn = (e: FocusEvent) => isField(e.target) && setOpen(true);
       const onOut = () => setOpen(false);
       document.addEventListener("focusin", onIn);
       document.addEventListener("focusout", onOut);
