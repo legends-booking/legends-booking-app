@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+
 import { useAuth } from './context/useAuth'
 import { SignIn } from './pages/SignIn'
 import { Routes, Route, useNavigate } from 'react-router-dom'
@@ -13,13 +13,7 @@ import { Dock } from './components/Dock'
 
 
 function App() {
-
-  type Panel = 'menu' | 'account' | null
-
   const navigate = useNavigate()
-  
-  const [panel, setPanel] = useState<Panel>(null)
-  const lastFocus = useRef<HTMLElement | null>(null)
   const { user , status} = useAuth()
   const UPCOMING = [
     {
